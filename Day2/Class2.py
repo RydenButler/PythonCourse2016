@@ -76,6 +76,12 @@ class human(object):
 		if self.sex=='Female': return self.speak("Hello, I'm Ms. %s" % self.name)
 		elif self.sex=='Male': return self.speak("Hello, I'm Mr. %s" % self.name)
 		else: return self.speak("Hello, I'm %s" % self.name)
+
+	def sayHi(self, otherHuman):
+		print '%s says hi to %s' % (self.name, otherHuman.name)
+
+	def writeFunc(self, func_type):
+		print 'I wrote a %s function' % (func_type)
 	
 	def __str__(self):
 		return 'Human: %d year-old %s.' % (self.age, self.sex)
