@@ -16,8 +16,9 @@ class OrdinalTest(unittest.TestCase):
 		self.assertNotEqual(3, Ordinalize.ordinalize(3))
 
 	def test_four_plus(self):
-		self.assertEqual('th', Ordinalize.ordinalize(x)[-2:])
-		self.assertNotEqual('x', Ordinalize.ordinalize(x)[-2:])
+		for x in range(4,10):
+			self.assertEqual('%ith' % x, Ordinalize.ordinalize(x))
+			self.assertNotEqual('tiger', Ordinalize.ordinalize(x))
 
 
 if __name__ == '__main__':
