@@ -72,5 +72,19 @@ for item in tweepy.Cursor(api.followers_ids, 'NYTimeskrugman').items(6000):
 ###If you are running code, this time.sleep will not gaurantee you don't go over the limit.
 # Exercise: write generic code that will never break (this will be very helpful for everything you do, including the homework)
 
+Trump = api.get_user('realDonaldTrump')
+
+Trump_followers = []
+
+while Trump_followers < 30000:
+	try: 
+		for item in tweepy.Cursor(api.followers_ids, 'realDonaldTrump').items(1):
+			print item
+	except:
+		time.sleep(10)
+	else:
+		for item in tweepy.Cursor(api.followers_ids, 'realDonaldTrump').items(6000):
+			print item
+			Trump_followers.append(item)
 
 

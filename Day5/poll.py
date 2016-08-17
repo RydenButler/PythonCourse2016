@@ -25,3 +25,8 @@ print [[x.pollster, x.method] for x in chart.polls()]
 
 # TODO: compare favorability of Trump and Clinton from a recent poll
 # use info at http://elections.huffingtonpost.com/pollster/api/
+new_poll = pollster.polls(chart = '2016-general-election-trump-vs-clinton')[0]
+new_question = [x['subpopulations'][0] for x in new_poll.questions if x['chart'] == '2016-general-election-trump-vs-clinton'][0]
+trump = [x for x in new_question['responses'] if x['choice'] == 'Donald Trump'][0]
+clinton = [x for x in new_question['responses'] if x['choice'] == 'Hillary Clinton'][0]
+print clinton['value'] - trump['value']
