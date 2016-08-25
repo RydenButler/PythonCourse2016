@@ -63,9 +63,10 @@ Extensions = soup.find_all('a', {'class': 'dt_link title'})
 Links = []
 prefix = 'http://www.heinonline.org/HOL/'
 for ex in Extensions:
-	suffix = str(Extensions[0]['href'])
+	suffix = str(ex['href'])
 	whole = prefix+suffix
 	Links.append(whole)
+Links.reverse()
 for link in Links:
 	new_page = urllib2.urlopen(link)
 	#new_page = urllib2.urlopen('http://www.heinonline.org/HOL/Index?index=ustreaties/kavs&collection=ustreaties')
@@ -73,7 +74,7 @@ for link in Links:
 	Extensions2 = new_soup.find_all('a', {'class': 'dt_link'})
 	Links2 = []
 	for ex2 in Extensions2:
-		suffix2 = str(Extensions2[0]['href'])
+		suffix2 = str(ex2['href'])
 		whole2 = prefix+suffix2
 		Links2.append(whole2)
 	for link2 in Links2:
@@ -83,38 +84,47 @@ for link in Links:
 		Ext = new_soup2.find_all('div', {'id' : 'hn_cit4'})
 		text_chunk = str(Ext[0].get_text())
 		number = re.findall(r'\d+', text_chunk)
-		title = re.findall(r'KAV\s.', text_chunk)
+		title = re.findall(r'KAV\s\d+', text_chunk)
 		print title
 		Title.append(title)
 		prefix  ='http://www.heinonline.org/HOL/Metadata?type=KAV&number='
 		suffix = '&collection=ustreaties'
 		Final_Link = prefix+str(number[0])+suffix
-		Final_page = urllib2.urlopen(Final_Link)
-		Final_Soup = BeautifulSoup(Final_page)
-		info = Final_Soup.find_all('td', {'valign':'top'})
-		Info = []
-		for line in info:
-			 Info.append(line.get_text())
-		force = str(Info[3])
-		force = re.findall(r'[A-Z]\w+', force)
-		Force.append(force)
-		sdn = str(Info[5])
-		sdn = re.sub(r'\n\s+','',sdn)
-		SDN.append(sdn)
-		country = str(Info[7])
-		country = re.sub(r'\n\s+','',country)
-		Country.append(country)
-		subject = str(Info[9])
-		subject = re.sub(r'\n\s+','',subject)
-		Subject.append(subject)
-		short = str(Info[11])
-		short = re.sub(r'\n\s+','',short)
-		Short.append(short)
-		desc = str(Info[13])
-		desc = re.sub(r'\n\s+','',desc)
-		Desc.append(desc)
-		lasttif = str(Info[15])
-		lasttif = re.findall(r'\d+', lasttif)
-		LastTIF.append(lasttif)
+		try:
+			Final_page = urllib2.urlopen(Final_Link)
+			Final_Soup = BeautifulSoup(Final_page)
+			info = Final_Soup.find_all('td', {'valign':'top'})
+			Info = []
+			for line in info:
+				Info.append(line.get_text())
+			force = str(Info[3])
+			force = re.findall(r'[A-Z]\w+', force)
+			Force.append(force)
+			sdn = str(Info[5])
+			sdn = re.sub(r'\n\s+','',sdn)
+			SDN.append(sdn)
+			country = str(Info[7])
+			country = re.sub(r'\n\s+','',country)
+			Country.append(country)
+			subject = str(Info[9])
+			subject = re.sub(r'\n\s+','',subject)
+			Subject.append(subject)
+			short = str(Info[11])
+			short = re.sub(r'\n\s+','',short)
+			Short.append(short)
+			desc = str(Info[13])
+			desc = re.sub(r'\n\s+','',desc)
+			Desc.append(desc)
+			lasttif = str(Info[15])
+			lasttif = re.findall(r'\d+', lasttif)
+			LastTIF.append(lasttif)
+		except:
+			Force.append('NA')
+			SDN.append('NA')
+			Country.append('NA')
+			Subject.append('NA')
+			Short.append('NA')
+			Desc.append('NA')
+			LastTIF.append('NA')
 
 
