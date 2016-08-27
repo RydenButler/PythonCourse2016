@@ -1,4 +1,10 @@
-engine = sqlalchemy.create_engine('sqlite:///geog.db', echo=False)
+import sqlalchemy
+
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, ForeignKey, and_, or_
+from sqlalchemy.orm import relationship, backref, sessionmaker
+
+engine = sqlalchemy.create_engine('sqlite:////Users/ryden/Dropbox/PythonCourse2016/Day9/geog.db', echo=False)
 
 Base = declarative_base() 
 
@@ -97,7 +103,21 @@ session.add_all([dept1, dept2, dept3, dept4])
 
 # TODO: Create towns, nested in departments
 
+a = Town('a',1)
+b = Town('b',2)
+c = Town('c',3)
+d = Town('d',4)
+e = Town('e',5)
+f = Town('f',6)
+
 session.add_all([a,b,c,d,e,f])
+
+dept1.towns.append(a)
+dept1.towns.append(b)
+dept2.towns.append(c)
+dept3.towns.append(d)
+dept3.towns.append(e)
+dept4.towns.append(f)
 
 ae = Distance(50)
 ae.td, ae.ta = a, e 
@@ -145,9 +165,29 @@ for town in session.query(Town).order_by(Town.id):
 
 # TODO: 
 # 1. Display, by department, the cities having more than 100000 inhabitants.
+
+for department in session.query(Department):
+  for town in department.towns:
+    if town.population < 10:
+      print department.deptname, town.name
+
 # 2. Display the list of all the one-way connections between two cities for which the population of one of the 2 cities is lower than 80000 inhabitants. 
+
+
+Thing = session.query(Town).filter(Town.population < 3)
+ 
+for route in session.query(Town, Distance).filter(Town.population < 3).filter(or_(Distance.townarrive == Town.name, Distance.towndepart == Town.name)):
+  print route
+
+
 # 3. Display the number of inhabitants per department (bonus: do it per region as well). 
 # hint: use func.sum
+
+for dep in session.query(Department):
+  total = 0
+  for town in dep.towns:
+    total += town.population
+  print dep.deptname, total
 
 # Copyright (c) 2014 Matt Dickenson
 # 
