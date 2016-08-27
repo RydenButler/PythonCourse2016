@@ -139,7 +139,7 @@ for book, author in session.query(Book, Author):
   print book.name, author.name
  
 for book, author in session.query(Book, Book.author):
-  print book.name, author
+  print book.name, book.author.name
 
  
 for book, author in session.query(Book, Author).filter(Book.author != None):
